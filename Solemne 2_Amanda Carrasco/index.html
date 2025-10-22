@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solemne 2</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #d5f6fb;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .clock {
+            position: relative;
+            width: 340px;
+            height: 340px;
+            border: 8px solid #76a2ff;
+            border-radius: 50%;
+            background: #95fffd;
+            box-shadow: 0 0 20px rgb(255, 159, 234);
+        }
+
+        .mark {
+            position: absolute;
+            width: 2px;
+            height: 12px;
+            background: #7873fd;
+            top: 0;
+            left: 50%;
+            transform-origin: center 170px;
+        }
+
+        .number {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff65de;
+           
+        }
+
+        .hand {
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            top: 50%;
+            left: 50%;
+            transform-origin: left center;
+            transform: rotate(90deg);
+            transition: transform 0.5s ease-in-out;
+            /* z-index:100; */
+            background-color: #ff63d8;
+        }
+
+        .hand.hour {
+           width: 28%; 
+           height: 6px;
+           background-color: #ff63d8;
+        }
+
+        .hand.minute {
+            width: 40%;
+            height: 4px;
+            background-color: #ff63d8;
+        }
+
+        .hand.second {
+            width: 45%;
+            height: 2px;
+            background-color: #ff63d8;
+        }
+
+        .center {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #7873fd;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="clock" id="clock">
+        <div class="hand hour" id="hour"></div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+        <div class="center"></div>
+
+    </div>
+
+    <script>
+        const clock = document.getElementById("clock");
+        for (let i = 0; i < 60; i++) {
+            const mark = document.createElement("div");
+            mark.classList.add("mark");
+            mark.style.transform = `rotate(${i * 6}deg) translateX(-50%)`;
+            clock.appendChild(mark);
+        }
+        for (let i = 1; i<= 12; i++) {
+            const number = document.createElement("div");
+            number.classList.add("number");
+            number.innerText = i;
+
+            const angle = (i * 30) - 90;
+            const radius = 135;
+            const x = radius *Math.cos(angle * Math.PI / 180);
+            const y = radius *Math.sin(angle * Math.PI / 180);
+
+            number.style.transform = `translate(${x}px, ${y}px)`;
+            clock.appendChild(number);
+
+        }
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const horas = ahora.getHours();
+            const minutos = ahora.getMinutes();
+            const segundos = ahora.getSeconds();
+
+            const anguloHoras = (horas % 12) * 30 + minutos * 0.5;
+            const anguloMinutos = minutos * 6;
+            const anguloSegundos = segundos * 6;
+
+            document.getElementById("hour").style.transform = `rotate(${anguloHoras}deg)`;
+            document.getElementById("minute").style.transform = `rotate(${anguloMinutos}deg)`;
+            document.getElementById("second").style.transform = `rotate(${anguloSegundos}deg)`;
+        }
+
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+    </script>
+    
+</body>
+</html>
